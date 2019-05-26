@@ -5,11 +5,11 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-
 #include <pwd.h>
 
 #define MAX_LEN_LINE    10
 #define LEN_HOSTNAME	30
+
 int main(void)
 {
     char command[MAX_LEN_LINE];
@@ -24,8 +24,9 @@ int main(void)
         char *s;
         int len;
         
-        //printf("MyShell $ ");
-	// 3
+    printf("MyShell $ ");
+
+	/* 3. username@hostname$ 형식의 shell prompt. username과 hostname 얻기*/
 	printf("%s@%s $ ",getpwuid(getuid())->pw_name,hostname);
         s = fgets(command, MAX_LEN_LINE, stdin);
         if (s == NULL) {
@@ -38,14 +39,15 @@ int main(void)
         if (command[len - 1] == '\n') {
             command[len - 1] = '\0'; 
         }
-	// 1
+
+	/* 1. exit 입력시 shell 종료 */
         if(!strcmp("exit",command)){
 		printf("exit!");
 		return 0;
 	}
-
         printf("[%s]\n", command);
-	// 2
+
+	/* 2. a;b;c와 같이 입력시 a,b,c세개의 프로그램 차례대로 실행*/
        	char *p = strtok(command, ";");
 	while(p != NULL){
 		printf("%s \n",p);
